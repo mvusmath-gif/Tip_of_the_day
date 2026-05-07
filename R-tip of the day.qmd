@@ -1,0 +1,195 @@
+--- 
+title: "The Loveliest R Tip of the Day"
+subtitle: "aRtsy and highcharter package"
+author: "Mvuselelo Mathunjwa"
+date: "7, May, 2026"
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: true
+    preview-links: auto
+editor_options: 
+  chunk_output_type: console
+theme: serif
+title-slide-attributes:
+  data-background-color: "#FFD1DC"
+  data-color: "#FF1493"
+---
+
+```{r}
+library(tidyverse)
+library(gapminder)
+library(aRtsy)
+library(highcharter)
+library(gapminder)
+```
+
+
+## What is aRtsy? {background="#FFD1DC" .smaller transition="slide"}
+
+aRtsy is an r pacakge used to create generative art using mathematics, algorithms, randomness, and data-based patterns. This package can be used to:
+
+::: incremental
+-   Create abstract, mathematical art
+-   Visualise data creatively
+-   Experiment with algorithms and symmetry 
+-   Combine programming with design
+
+ ![](Artwork.png){.absolute .fragment top="360" left="10" width="350" height="400"}
+
+ ![](Artwork2.png){.absolute .fragment top="360" left="360" width="360" height="400"}
+
+ ![](myArtwork.png){.absolute .fragment top="360" left="700" width="350" height="400"}
+:::
+
+. . .
+
+## aRtsy Example {auto-animate="true" background="#FFD1DC" .smaller transition="slide"}
+
+
+```{r}
+#| echo: true
+#| fig-width: 10
+#| fig-height: 4.5
+library(aRtsy)
+
+canvas_flow(
+  colors = colorPalette("blossom"),
+   background = "#fafafa",
+  lines = 900,
+  lwd = 0.05,
+  iterations = 100,
+  stepmax = 0.01,
+  outline = c("none", "circle", "square"),
+  polar = FALSE,
+  angles = NULL
+)
+```
+
+## Why is aRtsy useful? {background="#FFD1DC" .smaller transition="slide"}
+
+::: incremental
+-   SUPRISE!! IT IS NOT, ATLEAST NOT YET.
+-   The most we can do with it at this point is use it as a comparison to traditional plots.
+-   I would say most of it's usefulness comes from firing up data scientists' artistic spirit. 
+-   The night is still young though. There is still more exploration to be done with this package!
+
+![](Dance_Fox_Gif.gif){.absolute .fragment top="370" left="250" width="600" height="400"}
+:::
+
+## What is highcharter? {background="#FFD1DC" .smaller transition="slide"}
+
+::: {.fragment .fade-in}
+Highcharter is an R package that serves as a wrapper for the "Highcharts" JavaScript charting library. It creates interactive graphs and animated visualisations.
+:::
+
+::: {.fragment .fade-in}
+Highcharter also supports many different graph types like:
+:::
+
+::: {.fragment .fade-in}
+- Line graphs
+- Scatterplots
+- Bar charts
+- Pie charts 
+- Heat maps
+:::
+
+::: {.fragment .fade-in}
+Unlike normal graphs, highcharter has interactive elements that allow you to:
+:::
+
+::: {.fragment .fade-in}
+- Hover over points
+- Zoom into graphs
+- Hide or show categories
+:::
+
+## Example 1: Function Explanation {background="#FFD1DC" .smaller transition="slide"}
+
+-   It is very similar to ggplot and easy to use
+-   Incrementally highlight additional lines
+
+``` {.python code-line-numbers="9-10|12-17|19-24"}
+library(highcharter)
+library(gapminder)
+library(dplyr)
+
+big4 <- gapminder |>
+  filter(country %in% c("Niger","Swaziland", "Tanzania", "South Africa")) |>
+  arrange(year)
+
+# Creates empty highcharters object  
+highchart() |>
+
+# Inputs variables needed for graph 
+  hc_add_series(data = big4,
+                type = "line", 
+                hcaes(x = year,
+                      y = pop, 
+                      group = country)) |>
+  
+  # Sets labels for axis
+  hc_xAxis(title = list(text="Year")) |>
+  hc_yAxis(title = list(text="Population")) |>
+  hc_plotOptions(series = list(marker = list(symbol = "circle"))) |>
+  hc_legend(align = "right", 
+            verticalAlign = "top") 
+```
+
+## Example 1: Interactive Line Graph {background="#FFD1DC" .smaller transition="slide"}
+
+```{r}
+#| echo: false
+#| fig-height: 7
+library(gapminder)
+library(dplyr)
+
+big4 <- gapminder |>
+  filter(country %in% c("Niger","Swaziland", "Tanzania", "South Africa")) |>
+  arrange(year)
+
+highchart() |>
+  hc_add_series(data = big4,
+                type = "line", 
+                hcaes(x = year,
+                      y = pop, 
+                      group = country)) |>
+  hc_xAxis(title = list(text="Year")) |>
+  hc_yAxis(title = list(text="Population")) |>
+  hc_plotOptions(series = list(marker = list(symbol = "circle")), animation = TRUE) |>
+  hc_legend(align = "right", 
+            verticalAlign = "top") 
+```
+
+## Example 2: Interactive Pie Graph {background="#FFD1DC" .smaller transition="slide"}
+
+```{r}
+#| echo: false
+#| fig-height: 7
+
+big4_2 <- big4 |>
+  select(country, pop, year) |>
+  group_by(country) |>
+  summarise(total_pop = sum(pop))
+
+highchart() |>
+  hc_add_series(data = big4_2,
+                type = "pie", 
+                hcaes(x = country,
+                      y = total_pop)) |>
+  hc_title(text = "Population by Country") |>
+      hc_subtitle(text = "Four African countries by population")
+```
+
+## Usefulness and Limitations {background="#FFD1DC" .smaller transition="slide"}
+
+| Pros                                 | Cons                                         |
+|--------------------------------------|----------------------------------------------|
+| Dashboard and Shiny friendly         | Graphs rely on HTML and will not show up with rendered PDFS.|
+| Good for visualisation    | More focused on visualisation than analysis        |
+| Interactive and looks good    | Relies on JavaScript backend                                           |
+| Flexible since there is acess to many different types of graphs  |  Can get cluttered with big datasets  |
+
+# THANK YOU FOR LISTENING :3 {background="#FFD1DC" .smaller transition="slide"}
